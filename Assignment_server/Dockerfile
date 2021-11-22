@@ -1,6 +1,2 @@
+#https://docs.docker.com/samples/django/
 FROM alpine
-
-#WORKDIR /app/
-
-#COPY openapi.yml .
-
