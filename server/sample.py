@@ -15,5 +15,5 @@ class QuoteResource:
 
         resp.media = quote
 
-api = falcon.API()
-api.add_route('/quote', QuoteResource())
+app = falcon.App()
+app.add_route('/quote', QuoteResource())
