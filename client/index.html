@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
+    <title>Vue.js Test</title>
+    <style>
+        
+    </style>
+    <script src="https://unpkg.com/vue@next"></script> <!-- https://v3.vuejs.org/guide/installation.html#cdn -->
+</head>
+<body>
+    <h1>Vue.js Test</h1>
+
+    <!-- 
+        Vue.js - Introduction
+        https://v3.vuejs.org/guide/introduction.html#declarative-rendering 
+    -->
+    <div id="two-way-binding">
+        <p>{{ message }}</p>
+        <input v-model="message" />
+      </div>
+      
+    <script type="module">
+  const TwoWayBinding = {
+  data() {
+    return {
+      message: 'Hello Vue!'
+    }
+  }
+}
+
+Vue.createApp(TwoWayBinding).mount('#two-way-binding')
+    </script>
+</body>
+</html>

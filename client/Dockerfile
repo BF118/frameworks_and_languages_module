@@ -1,21 +1,7 @@
 #https://vuejs.org/v2/cookbook/dockerize-vuejs-app.html
-FROM node:lts-alpine
+#https://github.com/calaldees/frameworks_and_languages_module/blob/main/examples/client/vue_test/Dockerfile
+FROM nginx:alpine
 
-# install simple http server for serving static content
-RUN npm install -g http-server
-
-# make the 'app' folder the current working directory
-WORKDIR /app
-
-
-# install project dependencies
-RUN npm install vue
-
-# copy project files and folders to the current working directory (i.e. 'app' folder)
-COPY . .
-
-# build app for production with minification
-#RUN npm run build
-
-EXPOSE 8000
-CMD [ "http-server", "dist" ]
+ENV PATH_NGINX_SERVE=/usr/share/nginx/html
+RUN curl https://unpkg.com/vue@next -L -o ${PATH_NGINX_SERVE}/vue.js
+COPY . ${PATH_NGINX_SERVE}
