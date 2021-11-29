@@ -1,36 +1,75 @@
+<!--https://scotch.io/courses/getting-started-with-vuejs/processing-a-form-with-vue-->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
-    <title>Vue.js Test</title>
+    <title>Vue.js</title>
     <style>
-        
+
+
+
+
     </style>
-    <script src="https://unpkg.com/vue@next"></script> <!-- https://v3.vuejs.org/guide/installation.html#cdn -->
+    <script src="https://unpkg.com/vue@next"></script>
 </head>
 <body>
-    <h1>Vue.js Test</h1>
+    <h1>Vue.js</h1>
 
-    <!-- 
-        Vue.js - Introduction
-        https://v3.vuejs.org/guide/introduction.html#declarative-rendering 
-    -->
-    <div id="two-way-binding">
-        <p>{{ message }}</p>
-        <input v-model="message" />
-      </div>
+    <div class="hero is-fullheight is-info is-bold">
+      <div class="hero-body">
+      <div class="container">
       
-    <script type="module">
-  const TwoWayBinding = {
-  data() {
-    return {
-      message: 'Hello Vue!'
+        <h1 class="title has-text-centered">Vue.js Form Processing</h1>
+        <div class="box">
+      
+          <!-- our signup form ===================== -->
+          <form id="signup-form">
+            <!-- user id -->
+            <div class="field">
+              <label class="label">user id</label>
+              <input type="text" class="input" name="user id">
+            </div>
+      
+            <!-- lat -->
+            <div class="field">
+              <label class="label">lat</label>
+              <input type="text" class="input" name="lat">
+            </div>
+            <!-- lon -->
+            <div class="field">
+              <label class="label">lon</label>
+              <input type="text" class="input" name="lon">
+            </div>
+      
+            <!-- submit button -->
+            <div class="field has-text-right">
+              <button type="submit" class="button is-danger">Submit</button>
+            </div>
+          </form>
+      
+        </div>
+      
+      </div>
+      </div>
+      </div>
+
+<script>
+const app = new Vue({
+  el: '#signup-form',
+  data: {
+    user_id: '',
+    lat: '',
+    lon: ''
+  },
+  methods: {
+    processForm: function() {
+      console.log({ name: this.name, email: this.email });
+      alert('Processing');
     }
   }
-}
+});
+</script>
 
-Vue.createApp(TwoWayBinding).mount('#two-way-binding')
-    </script>
 </body>
 </html>
