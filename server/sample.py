@@ -16,7 +16,7 @@ class QuoteResource:
         resp.media = quote
 
 app = falcon.App()
-app.add_route('/quote', QuoteResource())
+app.add_route('/get', QuoteResource())
 
 if __name__ == '__main__':
 

@@ -1,4 +1,5 @@
 <!--https://scotch.io/courses/getting-started-with-vuejs/processing-a-form-with-vue-->
+<!--https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/calaldees/frameworks_and_languages_module/main/openapi.yml#operation/addItem-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +7,11 @@
     <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
     <title>Vue.js</title>
     <style>
-
+.grid {
+  display: grid;
+  grid-template-columns: 100px 400px;
+  grid-gap: 10px;
+}
 
 
 
@@ -14,32 +19,45 @@
     <script src="https://unpkg.com/vue@next"></script>
 </head>
 <body>
-    <h1>Vue.js</h1>
 
     <div class="hero is-fullheight is-info is-bold">
       <div class="hero-body">
       <div class="container">
       
-        <h1 class="title has-text-centered">Vue.js Form Processing</h1>
+        <h1 class="title">Vue.js Form Processing</h1>
         <div class="box">
       
           <!-- our signup form ===================== -->
           <form id="signup-form">
+            
             <!-- user id -->
             <div class="field">
               <label class="label">user id</label>
-              <input type="text" class="input" name="user id">
+              <input type="number" class="input" name="user id">
             </div>
-      
+            
+            <!-- keywords -->
+            <div class="field">
+              <label class="label">keywords</label>
+              <input type="text" class="input" name="keywords">
+            </div>
+            
+            <!-- Description -->
+            <div class="field">
+              <label class="field"> desc</label>
+              <input type="text" class="input" name="Description">
+            </div>
+
             <!-- lat -->
             <div class="field">
               <label class="label">lat</label>
-              <input type="text" class="input" name="lat">
+              <input type="number" class="input" name="lat">
             </div>
+            
             <!-- lon -->
             <div class="field">
               <label class="label">lon</label>
-              <input type="text" class="input" name="lon">
+              <input type="number" class="input" name="lon">
             </div>
       
             <!-- submit button -->
@@ -59,12 +77,14 @@ const app = new Vue({
   el: '#signup-form',
   data: {
     user_id: '',
+    keywords:'',
+    desc:'',
     lat: '',
     lon: ''
   },
   methods: {
     processForm: function() {
-      console.log({ name: this.name, email: this.email });
+      console.log({ user_id: this.user_id, keywords: this.keywords, desc: this.desc, lat: this.lat, lon: this.lon });
       alert('Processing');
     }
   }
