@@ -12,4 +12,5 @@ RUN pip install gunicorn falcon
 COPY . .
 
 
-ENTRYPOINT [ "gunicorn","--bind", "0.0.0.0:8000", "sample:app" ]
+ENTRYPOINT [ "gunicorn","-b", "0.0.0.0:8000", "app:api" ]
+
