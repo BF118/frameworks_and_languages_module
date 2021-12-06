@@ -18,59 +18,20 @@
     </style>
     <script src="https://unpkg.com/vue@next"></script>
 </head>
-<body>
+<form>
+  <label for ="create_user_id">Username</label>
+  <input id ="create_user_id" type="text" name="user_id">
+  <label for="create_lat">lat</label>
+  <input id="create_lat" type="text" name="lat">
+  <label for="create_lon">lon</label>
+  <input id="create_lon" type="text" name="lon">
+  <label id="create_keywords">keywords</label>
+  <input for="create_keywords" type="text" name="keywords">
+  <label for="create_description"> description</label>
+  <input id="create_description"type="text" name="description">
+  <input type="submit" id="action_create"data-action="create_item">
+</form>
 
-    <div class="hero is-fullheight is-info is-bold">
-      <div class="hero-body">
-      <div class="container">
-      
-        <h1 class="title">Vue.js Form Processing</h1>
-        <div class="box">
-      
-          <!-- our signup form ===================== -->
-          <form id="signup-form">
-            
-            <!-- user id -->
-            <div class="field">
-              <label class="label">user id</label>
-              <input type="number" class="input" name="user id">
-            </div>
-            
-            <!-- keywords -->
-            <div class="field">
-              <label class="label">keywords</label>
-              <input type="text" class="input" name="keywords">
-            </div>
-            
-            <!-- Description -->
-            <div class="field">
-              <label class="field"> desc</label>
-              <input type="text" class="input" name="Description">
-            </div>
-
-            <!-- lat -->
-            <div class="field">
-              <label class="label">lat</label>
-              <input type="number" class="input" name="lat">
-            </div>
-            
-            <!-- lon -->
-            <div class="field">
-              <label class="label">lon</label>
-              <input type="number" class="input" name="lon">
-            </div>
-      
-            <!-- submit button -->
-            <div class="field has-text-right">
-              <button type="submit" class="button is-danger">Submit</button>
-            </div>
-          </form>
-      
-        </div>
-      
-      </div>
-      </div>
-      </div>
 
 <script>
 const app = new Vue({
@@ -84,11 +45,14 @@ const app = new Vue({
   },
   methods: {
     processForm: function() {
-      console.log({ user_id: this.user_id, keywords: this.keywords, desc: this.desc, lat: this.lat, lon: this.lon });
+      data = console.log({ user_id: this.user_id, keywords: this.keywords, desc: this.desc, lat: this.lat, lon: this.lon });
       alert('Processing');
     }
   }
 });
+
+
+//look up video for js for saving data to server
 </script>
 
 </body>

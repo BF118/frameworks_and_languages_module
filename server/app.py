@@ -1,42 +1,23 @@
+#python3 -m http.server 8000
 import falcon
-
-class CatalogItem(object):
-    def on_get(self, req, resp):
-        route_path = str(req.path) 
-        if route_path.startswith("/quote"):   
-            quote = {
-            'quote': (
-                "I've always been more interested in "
-                "the future than in the past."
-            ),
-            'author': 'Grace Hopper'
-        }
-        elif route_path.startswith("/test"):
-            quote = {
-            'quote': (
-                "hello world"
-            ),
-            'test': 'test'
-        }
-        elif route_path.startswith("/quote2"):
-            quote = {
-            'quote': (
-                "I've always been more interested in "
-                "the future than in the past."
-            ),
-            'author': 'Grace Hopper'
-        }
-        
-        
-        
-        
-        
-        
-        resp.media = quote
-
+import json
+from views import getResource, postResource, deleResource
 
 
 api = falcon.App()
-api.add_route('/quote2', CatalogItem())
-api.add_route('/test', CatalogItem())
-api.add_route('/quote', CatalogItem())
+api.add_route('/get', getResource())
+api.add_route('/post', postResource())
+api.add_route('/delete', deleResource())
+# change to spec routing
+
+
+
+
+if __name__ == '__main__':
+    from wsgiref import simple_server
+    httpd = simple_server.make_server(['0.0.0.0'], [8000],(api))
+    try:
+        log.info('start')
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
