@@ -11,6 +11,5 @@ RUN pip install gunicorn falcon
 # Add demo app
 COPY . .
 
-
-ENTRYPOINT [ "gunicorn","-b", "0.0.0.0:8000", "app:api" ]
+CMD [ "python3","app.py" ]
 
