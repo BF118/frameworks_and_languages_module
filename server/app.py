@@ -6,8 +6,7 @@ from wsgiref.simple_server import make_server
 
 
 api = falcon.App()
-class HTTPRequests():
-    
+class getResource():
     def on_get_single(self,req,resp):
         
         if req.param("id"):
@@ -16,7 +15,7 @@ class HTTPRequests():
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
         pass
-    
+class getmultiResource():
     def on_get_multiple(self,req, resp):
         if req.param("id"):
             resp.media
@@ -24,7 +23,7 @@ class HTTPRequests():
             resp.status= falcon.HTTP_200
             resp.content_type = falcon.MEDIA_JSON
             pass
-
+class postResource():
     def on_post(self,req,resp):
         
         resp.media = {'id' : itemId, 'lat' : lat, 'lon' : lon, 'description' : description, 'keywords' : keywords}
@@ -32,7 +31,7 @@ class HTTPRequests():
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
         pass
-
+class deleResource():
     def on_del(self,req,resp):
         
         resp.status = falcon.HTTP_200
@@ -42,10 +41,10 @@ class HTTPRequests():
 
 
 
-api.add_route('/item', HTTPRequests.on_post)
-api.add_route('/item/{itemId}',HTTPRequests.on_get_single)
-api.add_route('/items', HTTPRequests.on_get_multiple)
-api.add_route('/item/{itemId}',HTTPRequests.on_del)
+api.add_route('/item', postResource())
+api.add_route('/item/{itemId}/',getResource())
+api.add_route('/items', getmultiResource())
+api.add_route('/item/{itemId}/',deleResource())
 # change to spec routing
 
 if __name__ == '__main__':

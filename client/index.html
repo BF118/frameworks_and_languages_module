@@ -47,7 +47,7 @@ testItem = {
 let items = []
 
 function getItems() {
-    fetch("${urlAPI}/items", {
+    fetch(`${urlAPI}/items`, {
         method: 'GET',
     })
         .then(response => response.json())
@@ -59,7 +59,7 @@ function getItems() {
 }
 
 function createItem(data) {
-    fetch("${urlAPI}/item", {
+    fetch(`${urlAPI}/item`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data),
@@ -70,7 +70,7 @@ function createItem(data) {
 }
 
 function deleteItem(item_id) {
-    fetch("${urlAPI}/item/${item_id}", {
+    fetch(`${urlAPI}/item/${item_id}`, {
         method: 'DELETE',
     })
         .then(json => console.log('deleteItem()', json))
