@@ -9,5 +9,4 @@ test:
 run:
 	docker run -it --rm --publish 8000:8000 ${DOCKER_IMAGE}
 run_local:
-	python3 -m http.server 8000
 	python3 app.py
