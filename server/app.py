@@ -6,16 +6,18 @@
 import falcon
 import json
 import datetime
+from falcon.http_status import HTTPStatus
 from wsgiref.simple_server import make_server
 from datastore import *
 
 class getResource():
     def on_get(self,req,resp ,userId,):
-        #if req.params(example["id"]):
-            resp.media = json.dumps(ITEMS)
         
-            resp.status = falcon.HTTP_OK
-            resp.content_type = falcon.MEDIA_JSON
+        resp.media ={'message': 'test'}
+        resp.media = ITEMS
+        
+        resp.status = falcon.HTTP_OK
+        resp.content_type = falcon.MEDIA_JSON
     
     def on_delete(self,req,resp, userId):
         
@@ -25,7 +27,7 @@ class getResource():
 
 class getmultiResource():
    def on_get(self,req, resp):
-        #if req.get_param("id"):
+        
             resp.media = ITEMS
             
             resp.status= falcon.HTTP_200
@@ -41,7 +43,9 @@ class postResource():
         
         fields =set({'user_id', 'keywords', 'description', 'lat', 'lon', 'date_from', 'date_to'})
         if ITEMS.keys() != fields:
-            resp.status = falcon.HTTP_204
+            resp.status = falcon.HTTP_405
+            print(ITEMS.keys())
+            print(fields)
         else:
             app.update(ITEMS)
             resp.text= "Data added"
@@ -49,17 +53,26 @@ class postResource():
     #_id = max(ITEMS.keys()) + 1
         
         resp.content_type = falcon.MEDIA_JSON
-
-
-api = falcon.App(middleware=falcon.CORSMiddleware(
-    allow_origins='http//:localhost:8001', allow_credentials='*'))
-
 class rootResource():
     def on_get(self,req ,resp):
-        
+        resp.body ="test"
+        resp.content_type = "text/html"
         resp.status = falcon.HTTP_200
 
+#https://github.com/falconry/falcon/issues/1220
+class HandleCORS(object):
+    def process_request(self, req, resp):
+        resp.set_header('Access-Control-Allow-Origin', '*')
+        resp.set_header('Access-Control-Allow-Methods','POST')
+        resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
+        resp.set_header('Access-Control-Max-Age', 1728000)  # 20 days
+        if req.method == 'OPTIONS':
+            raise HTTPStatus(falcon.HTTP_204, body='\n')
 
+
+
+
+api = falcon.App(middleware=[HandleCORS() ])
 
 api.add_route('/', rootResource())
 api.add_route('/item', postResource())
