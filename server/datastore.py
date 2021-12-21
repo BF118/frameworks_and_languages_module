@@ -1,6 +1,7 @@
 
 
-ITEMS ={}
+ITEMS = {
+    1: {}}
 
 class DataModelPythonDict:
     def __init__(self, items):

@@ -36,49 +36,31 @@
 
 
 <script>
+const url= "https://8000-sapphire-jaguar-8okm2lnn.ws-eu23.gitpod.io"
 
-urlAPI = 'https://8000-sapphire-jaguar-8okm2lnn.ws-eu21.gitpod.io'
-testItem = {
-    user_id: "bob",
-    lat: 1,
-    lon: 1,
-    keywords: "a, b, c",
-    description: "a test item that is great",
-}
+export default{
+    name:"api",
+    data(){
+        return{
+            postResult: null
+    }
+},
+methods:{formatResponse(res){
+    return JSON.stringify(res, null,2);
+},
 
-let items = []
+try {
+        const res = await fetch(`${baseURL}/tutorials`, {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": "token-value",
+          },
+          body: JSON.stringify(postData),
+        });
 
-function getItems() {
-    fetch(`${urlAPI}/items`, {
-        method: 'GET',
-    })
-        .then(response => response.json())
-        .then(json => {
-            console.log("getItems", json)
-            items = json  // save the json we got back into the variable `items`
-        })
-    .catch(err => console.error(err))
-}
 
-function createItem(data) {
-    fetch(`${urlAPI}/item`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data),
-    })
-        .then(response => response.json())
-        .then(json => console.log('createItems()', json))
-    .catch(err => console.error(err));
-}
 
-function deleteItem(item_id) {
-    fetch(`${urlAPI}/item/${item_id}`, {
-        method: 'DELETE',
-    })
-        .then(json => console.log('deleteItem()', json))
-    .catch(err => console.error(err));
-}
-Vue.createApp(FormData).mount('#counter')
 //look up video for js for saving data to server
 </script>
 

@@ -11,48 +11,63 @@ from wsgiref.simple_server import make_server
 from datastore import *
 
 class getResource():
-    def on_get(self,req,resp ,userId,):
-        
-        resp.media ={'message': 'test'}
-        resp.media = ITEMS
-        
-        resp.status = falcon.HTTP_OK
-        resp.content_type = falcon.MEDIA_JSON
-    
-    def on_delete(self,req,resp, userId):
-        
-        resp.status = falcon.HTTP_200
-        resp.content_type = falcon.MEDIA_JSON
-        pass
+    def on_get(self,req,resp ,userId):
+            filtered_items = list(filter(lambda x: x["id"] == int(userId), ITEMS))
+            resp.text = json.dumps(filtered_items)
+            resp.status = falcon.HTTP_200
+            resp.content_type = falcon.MEDIA_JSON
 
 class getmultiResource():
    def on_get(self,req, resp):
         
-            resp.media = ITEMS
             
+        inputdata = json.load(req.bounded_stream)
+        userid = inputdata.userid
+
+        if(ITEMS.values == userid):
+            resp.media = json.dumps(ITEMS)
+
+
             resp.status= falcon.HTTP_200
-            resp.content_type = falcon.MEDIA_JSON
-            pass
+        else:
+            resp.status = falcon.HTTP_400
+        
+        resp.content_type = falcon.MEDIA_JSON
+        pass
 
 class postResource():
     def on_post(self,req,resp):
-        app = json.load(req.bounded_stream)
+        
+        inputdata = json.load(req.bounded_stream)
         
         date_from = datetime.datetime.now()
         date_to = datetime.datetime.now()
+        newId = max(ITEMS.keys()) + 1
+
+        reqFields =set({'user_id', 'keywords', 'description', 'lat', 'lon'})
+        givenFields = set(inputdata.keys())
         
-        fields =set({'user_id', 'keywords', 'description', 'lat', 'lon', 'date_from', 'date_to'})
-        if ITEMS.keys() != fields:
-            resp.status = falcon.HTTP_405
-            print(ITEMS.keys())
-            print(fields)
-        else:
-            app.update(ITEMS)
-            resp.text= "Data added"
+        
+        if(givenFields.issubset(reqFields)):
+            inputdata['date_from'] = date_from.strftime
+            inputdata['date_to'] = date_to.strftime
+            inputdata['id'] = newId
+
+
+            datastore.create_item(inputdata)
             resp.status = falcon.HTTP_201
-    #_id = max(ITEMS.keys()) + 1
-        
-        resp.content_type = falcon.MEDIA_JSON
+            resp.media = {'id': newId}
+        else:
+            resp.status = falcon.HTTP_405
+        resp.content_type = "application/json"
+
+
+def deleteResource():
+    def on_delete(self,req, resp):
+        resp.media = req.media
+        resp.status = falcon.HTTP_404
+        pass
+
 class rootResource():
     def on_get(self,req ,resp):
         resp.body ="test"
@@ -77,6 +92,7 @@ api = falcon.App(middleware=[HandleCORS() ])
 api.add_route('/', rootResource())
 api.add_route('/item', postResource())
 api.add_route('/item/{userId}/',getResource())
+api.add_route('/item/{userId}/',deleteResource())
 api.add_route('/items', getmultiResource())
 # change to spec routing
 
