@@ -36,30 +36,133 @@
 
 
 <script>
-const url= "https://8000-sapphire-jaguar-8okm2lnn.ws-eu23.gitpod.io"
+         const urlParams = new URLSearchParams(window.location.search);
+	        const apiUrl = (urlParams.get('api') || '/api/v1').replace(/\/$/, '');
+            url ="https://8001-sapphire-jaguar-8okm2lnn.ws-eu25.gitpod.io"
+            
+            const app = Vue.createApp({
+                data() {
+                    return {
+                        items: null,
+                        collapsed_div: true,
 
-export default{
-    name:"api",
-    data(){
-        return{
-            postResult: null
-    }
-},
-methods:{formatResponse(res){
-    return JSON.stringify(res, null,2);
-},
+                        userId:'',
+                        description:'',
+                        lat:'',
+                        lon:'',
+                        keywords_string:'',
+                        title:''
+                    }
+                },
+                mounted() {
+                    this.load_items();
+                },
+                methods:{
+                    load_items(){
+                        fetch(Url + "/items")
+                            .then(function(res){
+                                if(res.status == 204){
+                                    return {};
+                                }
+                                else{
+                                    return res.json();
+                                }
+                            })
+                            .then((data) => {
+                                this.items = data;
 
-try {
-        const res = await fetch(`${baseURL}/tutorials`, {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": "token-value",
-          },
-          body: JSON.stringify(postData),
-        });
+                                for(var item of this.items){
+                                    var markerTitle = '';
+                                    if(item.title == '' || !item.hasOwnProperty('title')){
+                                        markerTitle = "Item " + item.id;
+                                    }
+                                    else{
+                                        markerTitle = item.title;
+                                    }
+                                    const marker = new google.maps.Marker({
+                                        position: { lat: item.lat, lng: item.lon },
+                                        map: map,
+                                        visible: false,
+                                        title: markerTitle
+                                    });
+                                    item.marker_visible = false;
+                                    item.map_marker = marker;
+                                }
+                            })
+                            .catch(err => console.log(err.message))
+                    },
 
+                    async create_item(){
+                        /*split string from 'keywords' input into an array
+                          and delete white-space characters from every element*/
+                        var arr = this.keywords_string.split(',')
+                        arr = arr.map(s => s.trim())
+                        var data = {
+                            user_id: this.userId,
+                            description: this.description,
+                            image: this.image,
+                            lat: this.lat,
+                            lon: this.lon,
+                            keywords: arr,
+                            title: this.title
+                        }
 
+                        console.log(data)
+                        //send a POST request to the server with the new data and correct headers
+                        var response = await fetch(Url + "/item",{
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        }).catch(err => console.log(err))
+
+                        //clear input fields
+                        this.userId = '';
+                        this.description = '';
+                        this.image = '';
+                        this.lat = '';
+                        this.lon = '';
+                        this.keywords_string = '';
+                        this.title = '';
+
+                        //when adding a new item, it hides all markers, 
+                        //because if an item is added while a marker is displayed, the marker would stay stay on the screen forever
+                        for(let item of this.items){
+                            this.hideMarker(item);
+                        }
+
+                        this.load_items()
+                    },
+
+                    async delete_item(item){
+                        //send a DELETE request to the server
+                        await fetch(Url + "/item/" + item.id, {
+                            method: 'DELETE'
+                        }).catch(err => console.log(err.message))
+                        this.hideMarker(item);
+                        this.load_items()
+                    },
+
+                    //method for checking form validation on submission without the default redirect behavior
+                    onSubmit(event){
+                        event.preventDefault(); 
+                        var ele = document.getElementById("form");
+                        var chk_status = ele.checkValidity();
+                        ele.reportValidity();
+                        if (chk_status){
+                            this.create_item();
+                        }
+                    },
+
+                    toggleCollapsed(){
+                        this.collapsed_div = !this.collapsed_div;
+                    }
+                }
+            });
+
+            app.mount('#main')
+        </script>
 
 //look up video for js for saving data to server
 </script>

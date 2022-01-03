@@ -12,15 +12,14 @@ from datastore import *
 
 class getResource():
     def on_get(self,req,resp ,userId):
-            filtered_items = list(filter(lambda x: x["id"] == int(userId), ITEMS))
-            resp.text = json.dumps(filtered_items)
-            resp.status = falcon.HTTP_200
-            resp.content_type = falcon.MEDIA_JSON
+        
+        resp.media = json.dumps(ITEMS)
+        resp.status= falcon.HTTP_200
+        resp.content_type = falcon.MEDIA_JSON
+        pass
 
 class getmultiResource():
    def on_get(self,req, resp):
-        
-            
         inputdata = json.load(req.bounded_stream)
         userid = inputdata.userid
 
@@ -30,6 +29,7 @@ class getmultiResource():
 
             resp.status= falcon.HTTP_200
         else:
+            print(ITEMS.keys())
             resp.status = falcon.HTTP_400
         
         resp.content_type = falcon.MEDIA_JSON
@@ -86,9 +86,7 @@ class HandleCORS(object):
 
 
 
-
 api = falcon.App(middleware=[HandleCORS() ])
-
 api.add_route('/', rootResource())
 api.add_route('/item', postResource())
 api.add_route('/item/{userId}/',getResource())
