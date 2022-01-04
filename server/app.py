@@ -6,60 +6,74 @@
 import falcon
 import json
 import datetime
+
+
+
 from falcon.http_status import HTTPStatus
 from wsgiref.simple_server import make_server
 from datastore import *
 
 class getResource():
-    def on_get(self,req,resp ,userId):
+    def on_get(self,req,resp ,itemId):
         
-        resp.media = json.dumps(ITEMS)
-        resp.status= falcon.HTTP_200
-        resp.content_type = falcon.MEDIA_JSON
-        pass
+        setId = int(itemId) -1
+        fetchedItem={}
+        fetchedItem = datastore.get_item(setId)
+
+        if not fetchedItem:
+            resp.falcon.HTTP_404
+        else:
+            resp.status= falcon.HTTP_200
+            resp.media ={"id" :fetchedItem.get('id') + 1}
+        resp.content_type = "application/json"
+    def on_delete(self, req, resp, itemId):
+
+        item = {}
+        item = datastore.get_item(itemId)
+        setId = int(itemId) - 1
+
+        item = datastore.get_item(fixedId)
+
+        if not item:
+            resp.status = falcon.HTTP_201
+        else:
+            datastore.delete_item(itemId)
+            datastore.delete_item(setId)
+            resp.status = falcon.HTTP_404
+
 
 class getmultiResource():
    def on_get(self,req, resp):
-        inputdata = json.load(req.bounded_stream)
-        userid = inputdata.userid
+        fetchedData = []
 
-        if(ITEMS.values == userid):
-            resp.media = json.dumps(ITEMS)
-
-
-            resp.status= falcon.HTTP_200
-        else:
-            print(ITEMS.keys())
-            resp.status = falcon.HTTP_400
-        
-        resp.content_type = falcon.MEDIA_JSON
-        pass
+        resp.status = falcon.HTTP_200
+        resp.content_type = "application/json"
+        resp.media = fetchedData
 
 class postResource():
     def on_post(self,req,resp):
         
-        inputdata = json.load(req.bounded_stream)
-        
-        date_from = datetime.datetime.now()
-        date_to = datetime.datetime.now()
-        newId = max(ITEMS.keys()) + 1
+        inputdata ={}
+        inputdata = req.get_media()
 
         reqFields =set({'user_id', 'keywords', 'description', 'lat', 'lon'})
         givenFields = set(inputdata.keys())
         
+        date_from = datetime.datetime.now().isoformat
+        date_to = datetime.datetime.now().isoformat
+
         
         if(givenFields.issubset(reqFields)):
-            inputdata['date_from'] = date_from.strftime
-            inputdata['date_to'] = date_to.strftime
-            inputdata['id'] = newId
-
-
+            inputdata['date_from'] = date_from
+            inputdata['date_to'] = date_to
+            newId = max(ITEMS.keys()) + 1
             datastore.create_item(inputdata)
-            resp.status = falcon.HTTP_201
             resp.media = {'id': newId}
+            resp.content_type = "application/json"
+            resp.status = falcon.HTTP_201
         else:
             resp.status = falcon.HTTP_405
-        resp.content_type = "application/json"
+        
 
 
 def deleteResource():

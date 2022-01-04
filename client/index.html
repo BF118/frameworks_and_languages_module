@@ -19,7 +19,7 @@
     <script src="https://unpkg.com/vue@next"></script>
 </head>
 <form>
-  <label for ="create_user_id">Username</label>
+  <label for ="create_user_id">user_id</label>
   <input id ="create_user_id" type="text" name="user_id">
   <label for="create_lat">lat</label>
   <input id="create_lat" type="text" name="lat">
@@ -35,6 +35,7 @@
 </form>
 
 
+
 <script>
          const urlParams = new URLSearchParams(window.location.search);
 	        const apiUrl = (urlParams.get('api') || '/api/v1').replace(/\/$/, '');
@@ -45,7 +46,6 @@
                     return {
                         items: null,
                         collapsed_div: true,
-
                         userId:'',
                         description:'',
                         lat:'',
@@ -93,14 +93,11 @@
                     },
 
                     async create_item(){
-                        /*split string from 'keywords' input into an array
-                          and delete white-space characters from every element*/
                         var arr = this.keywords_string.split(',')
                         arr = arr.map(s => s.trim())
                         var data = {
                             user_id: this.userId,
                             description: this.description,
-                            image: this.image,
                             lat: this.lat,
                             lon: this.lon,
                             keywords: arr,
@@ -108,7 +105,7 @@
                         }
 
                         console.log(data)
-                        //send a POST request to the server with the new data and correct headers
+                       
                         var response = await fetch(Url + "/item",{
                             method: 'POST',
                             headers: {
@@ -120,14 +117,12 @@
                         //clear input fields
                         this.userId = '';
                         this.description = '';
-                        this.image = '';
                         this.lat = '';
                         this.lon = '';
                         this.keywords_string = '';
                         this.title = '';
 
-                        //when adding a new item, it hides all markers, 
-                        //because if an item is added while a marker is displayed, the marker would stay stay on the screen forever
+                      
                         for(let item of this.items){
                             this.hideMarker(item);
                         }
@@ -136,7 +131,7 @@
                     },
 
                     async delete_item(item){
-                        //send a DELETE request to the server
+                        
                         await fetch(Url + "/item/" + item.id, {
                             method: 'DELETE'
                         }).catch(err => console.log(err.message))
@@ -144,7 +139,7 @@
                         this.load_items()
                     },
 
-                    //method for checking form validation on submission without the default redirect behavior
+                    
                     onSubmit(event){
                         event.preventDefault(); 
                         var ele = document.getElementById("form");
@@ -160,12 +155,8 @@
                     }
                 }
             });
-
             app.mount('#main')
         </script>
-
-//look up video for js for saving data to server
-</script>
 
 </body>
 </html>
