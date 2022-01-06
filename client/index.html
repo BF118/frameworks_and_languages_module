@@ -7,17 +7,56 @@
     <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
     <title>Vue.js</title>
     <style>
-.grid {
-  display: grid;
-  grid-template-columns: 100px 400px;
-  grid-gap: 10px;
+html, body {
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+a {
+	color: inherit;
+	text-decoration: inherit;
 }
 
+#nav div {
+	display: inline-block;
+}
 
+#nav h1 {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+}
 
+#menu li {
+	display: inline-block;
+}
+
+#user {
+	float: right;
+}
+
+#main {
+
+}
+
+#templates {
+	display: none;
+}
     </style>
     <script src="https://unpkg.com/vue@next"></script>
 </head>
+<body>
+    <div id="nav">
+        <div id="logo">
+            <a href="#">
+                &#128205; <!-- Unicode for Map Pin - https://unicode-table.com/en/1F4CD/ -->
+                <h1>FreeCycle</h1>
+            </a>
+        </div>
+    </div>
+
+<h3>New Item</h3>
+<div id="main">
 <form>
   <label for ="create_user_id">user_id</label>
   <input id ="create_user_id" type="text" name="user_id">
@@ -29,17 +68,43 @@
   <input for="create_keywords" type="text" name="keywords">
   <label for="create_description"> description</label>
   <input id="create_description"type="text" name="description">
-  <!--label for="image">image</label-->
-  <!--input id="image" type="text" name="image" value="http://placekitten.com/100/100"-->
+  <label for="create_image">image</label><input id="create_image" type="text" name="image" value="http://placekitten.com/100/100"/>
   <input type="submit" id="action_create"data-action="create_item">
 </form>
+<h3>Items</h3>
+<div data-page="items"><ul></ul></div>
 
+
+<div id="templates">
+
+<div data-page="item">
+    
+</div>
+
+<div data-page="items">
+    <h2>List items</h2>
+    <ul>
+        <li>
+            <span data-field="id"></span>
+            <img src="" data-field="image"/>
+            <a href="" data-field="user_id"></a>
+            LatLon: <span data-field="lat"></span>,<span data-field="lon"></span>
+            <span data-field="date_from"></span>
+            <p data-field="description"></p>
+            <ul data-field="keywords"></ul>
+            <button data-action="delete">delete</button>
+        </li>
+    </ul>
+</div>
+</div>
+</body>
 
 
 <script>
+    
          const urlParams = new URLSearchParams(window.location.search);
 	        const apiUrl = (urlParams.get('api') || '/api/v1').replace(/\/$/, '');
-            url ="https://8001-sapphire-jaguar-8okm2lnn.ws-eu25.gitpod.io"
+            url ="https://8000-sapphire-jaguar-8okm2lnn.ws-eu25.gitpod.io"
             
             const app = Vue.createApp({
                 data() {
@@ -48,6 +113,7 @@
                         collapsed_div: true,
                         userId:'',
                         description:'',
+                        image:'',
                         lat:'',
                         lon:'',
                         keywords_string:'',
@@ -59,34 +125,13 @@
                 },
                 methods:{
                     load_items(){
-                        fetch(Url + "/items")
+                        fetch(url + "/items")
                             .then(function(res){
                                 if(res.status == 204){
                                     return {};
                                 }
                                 else{
                                     return res.json();
-                                }
-                            })
-                            .then((data) => {
-                                this.items = data;
-
-                                for(var item of this.items){
-                                    var markerTitle = '';
-                                    if(item.title == '' || !item.hasOwnProperty('title')){
-                                        markerTitle = "Item " + item.id;
-                                    }
-                                    else{
-                                        markerTitle = item.title;
-                                    }
-                                    const marker = new google.maps.Marker({
-                                        position: { lat: item.lat, lng: item.lon },
-                                        map: map,
-                                        visible: false,
-                                        title: markerTitle
-                                    });
-                                    item.marker_visible = false;
-                                    item.map_marker = marker;
                                 }
                             })
                             .catch(err => console.log(err.message))
@@ -98,15 +143,15 @@
                         var data = {
                             user_id: this.userId,
                             description: this.description,
+                            image: this.image,
                             lat: this.lat,
                             lon: this.lon,
                             keywords: arr,
                             title: this.title
                         }
-
                         console.log(data)
                        
-                        var response = await fetch(Url + "/item",{
+                        var response = await fetch(url + "/item",{
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -117,6 +162,7 @@
                         //clear input fields
                         this.userId = '';
                         this.description = '';
+                        this.image= '';
                         this.lat = '';
                         this.lon = '';
                         this.keywords_string = '';
@@ -132,7 +178,7 @@
 
                     async delete_item(item){
                         
-                        await fetch(Url + "/item/" + item.id, {
+                        await fetch(url + "/item/" + item.id, {
                             method: 'DELETE'
                         }).catch(err => console.log(err.message))
                         this.hideMarker(item);
@@ -155,6 +201,7 @@
                     }
                 }
             });
+
             app.mount('#main')
         </script>
 

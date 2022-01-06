@@ -49,6 +49,8 @@ class getmultiResource():
         resp.status = falcon.HTTP_200
         resp.content_type = "application/json"
         resp.media = fetchedData
+        
+        
 
 class postResource():
     def on_post(self,req,resp):
@@ -56,7 +58,7 @@ class postResource():
         inputdata ={}
         inputdata = req.get_media()
 
-        reqFields =set({'user_id', 'keywords', 'description', 'lat', 'lon'})
+        reqFields =set({'user_id', 'keywords', 'description', 'lat', 'lon','image'})
         givenFields = set(inputdata.keys())
         
         date_from = datetime.datetime.now().isoformat
@@ -74,14 +76,6 @@ class postResource():
         else:
             resp.status = falcon.HTTP_405
         
-
-
-def deleteResource():
-    def on_delete(self,req, resp):
-        resp.media = req.media
-        resp.status = falcon.HTTP_404
-        pass
-
 class rootResource():
     def on_get(self,req ,resp):
         resp.body ="test"
@@ -104,7 +98,6 @@ api = falcon.App(middleware=[HandleCORS() ])
 api.add_route('/', rootResource())
 api.add_route('/item', postResource())
 api.add_route('/item/{userId}/',getResource())
-api.add_route('/item/{userId}/',deleteResource())
 api.add_route('/items', getmultiResource())
 # change to spec routing
 
