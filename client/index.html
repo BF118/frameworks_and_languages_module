@@ -58,50 +58,30 @@ a {
 <h3>New Item</h3>
 <div id="main">
 <form>
-  <label for ="create_user_id">user_id</label>
-  <input id ="create_user_id" type="text" name="user_id">
-  <label for="create_lat">lat</label>
-  <input id="create_lat" type="text" name="lat">
-  <label for="create_lon">lon</label>
-  <input id="create_lon" type="text" name="lon">
-  <label id="create_keywords">keywords</label>
-  <input for="create_keywords" type="text" name="keywords">
-  <label for="create_description"> description</label>
-  <input id="create_description"type="text" name="description">
-  <label for="create_image">image</label><input id="create_image" type="text" name="image" value="http://placekitten.com/100/100"/>
+  <input name="user_id" type="text" v-model.lazy="userId" placeholder="User ID">
+  <input name="lat" type="text"  v-model="lat" placeholder="lat">
+  <input name="lon" type="text"  v-model="lon" placeholder="lon">
+  <input name="keywords" type="text"  v-model="keywords" placeholder="Keywords">
+  <input name="description" type="text"  v-model="description" placeholder="Description">
+  <input type="text" name="image" v-model="image" value="http://placekitten.com/100/100" placeholder="Image"/>
   <input type="submit" id="action_create"data-action="create_item">
 </form>
 <h3>Items</h3>
-<div data-page="items"><ul></ul></div>
-
-
-<div id="templates">
 
 <div data-page="item">
-    
-</div>
-
-<div data-page="items">
-    <h2>List items</h2>
-    <ul>
-        <li>
-            <span data-field="id"></span>
-            <img src="" data-field="image"/>
-            <a href="" data-field="user_id"></a>
-            LatLon: <span data-field="lat"></span>,<span data-field="lon"></span>
-            <span data-field="date_from"></span>
-            <p data-field="description"></p>
-            <ul data-field="keywords"></ul>
-            <button data-action="delete">delete</button>
-        </li>
-    </ul>
-</div>
+    <p>userid is: {{userId}}</p>
+    <p>lat is: {{lat}}</p>
+    <p>lon is: {{lon}}</p>
+    <p>Keywords: {{keywords}}</p>
+    <p>Description: {{description}}</p>
+    <p>Image: {{image}}</p>
+    <button data-action="delete_item" @click="delete_item(item)">delete</button>
 </div>
 </body>
 
 
 <script>
-    
+        
          const urlParams = new URLSearchParams(window.location.search);
 	        const apiUrl = (urlParams.get('api') || '/api/v1').replace(/\/$/, '');
             url ="https://8000-sapphire-jaguar-8okm2lnn.ws-eu25.gitpod.io"
@@ -116,8 +96,7 @@ a {
                         image:'',
                         lat:'',
                         lon:'',
-                        keywords_string:'',
-                        title:''
+                        keywords:'',
                     }
                 },
                 mounted() {
@@ -138,7 +117,7 @@ a {
                     },
 
                     async create_item(){
-                        var arr = this.keywords_string.split(',')
+                        var arr = this.keywords.split(',')
                         arr = arr.map(s => s.trim())
                         var data = {
                             user_id: this.userId,
@@ -147,7 +126,6 @@ a {
                             lat: this.lat,
                             lon: this.lon,
                             keywords: arr,
-                            title: this.title
                         }
                         console.log(data)
                        
@@ -166,7 +144,7 @@ a {
                         this.lat = '';
                         this.lon = '';
                         this.keywords_string = '';
-                        this.title = '';
+
 
                       
                         for(let item of this.items){

@@ -14,7 +14,7 @@ from wsgiref.simple_server import make_server
 from datastore import *
 
 class getResource():
-    def on_get(self,req,resp ,itemId):
+    def on_get(self,req,resp,itemId):
         
         setId = int(itemId) -1
         fetchedItem={}
@@ -23,7 +23,7 @@ class getResource():
         if not fetchedItem:
             resp.falcon.HTTP_404
         else:
-            resp.status= falcon.HTTP_200
+            resp.status= falcon.HTTP_201
             resp.media ={"id" :fetchedItem.get('id') + 1}
         resp.content_type = "application/json"
     def on_delete(self, req, resp, itemId):
@@ -86,7 +86,7 @@ class rootResource():
 class HandleCORS(object):
     def process_request(self, req, resp):
         resp.set_header('Access-Control-Allow-Origin', '*')
-        resp.set_header('Access-Control-Allow-Methods','POST')
+        resp.set_header('Access-Control-Allow-Methods','POST, GET, DELETE')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
         resp.set_header('Access-Control-Max-Age', 1728000)  # 20 days
         if req.method == 'OPTIONS':
