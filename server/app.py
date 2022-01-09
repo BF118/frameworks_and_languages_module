@@ -28,8 +28,7 @@ class getResource():
     def on_get(self,req,resp,itemId):#Request for a singular item
 
         #changes the itemId variable to setid 
-        setId = int(itemId)
-        
+        setId = req.get_params(itemId)
         #creates an empty dictionary that we then put the data in from the datestore
         fetchedItem={{}}
         fetchedItem = datastore.get_item(setId)

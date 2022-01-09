@@ -1,7 +1,7 @@
 Server
 ======
 #Start up instructions:
-*    Get to the correct directory using cd server
+*   Get to the correct directory using cd server
 *   input: cd server
 *   once there we need to use a dockerfile to install all the files and
 *   dependencies that we need. 
@@ -12,8 +12,8 @@ Server
 *   Doing so will start up the server
 
 #Running Locally:
-*To run the server locally have to do a similar thing as above
+*    To run the server locally have to do a similar thing as above
 *    Input: cd server
-*Then instead of make build and make run we want to input make run_local
-*   Input: Make run_local
+*    Then instead of make build and make run we want to input make run_local
+*    Input: Make run_local
     
