@@ -13,7 +13,7 @@ ITEMS = {
     }
 }
 
-class DataModelPythonDict:
+class DataModelPythonDict():
     def __init__(self, items):
         self.items = items or {}
         self.items_id_max = max(self.items.keys() or (0,0))
