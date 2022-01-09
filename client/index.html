@@ -58,6 +58,7 @@ a {
 <h3>New Item</h3>
 <div id="main">
 <form>
+<!--vuejs form that uses v-model for input bindings as well as having names that are identical to spec-->
   <input name="user_id" type="text" v-model.lazy="userId" placeholder="User ID">
   <input name="lat" type="text"  v-model="lat" placeholder="lat">
   <input name="lon" type="text"  v-model="lon" placeholder="lon">
@@ -67,8 +68,8 @@ a {
   <input type="submit" id="action_create"data-action="create_item">
 </form>
 <h3>Items</h3>
-
 <div data-page="item">
+<!--shows all the data that the user has input into the form-->
     <p>userid is: {{userId}}</p>
     <p>lat is: {{lat}}</p>
     <p>lon is: {{lon}}</p>
@@ -81,12 +82,10 @@ a {
 
 
 <script>
-        
-         const urlParams = new URLSearchParams(window.location.search);
-	        const apiUrl = (urlParams.get('api') || '/api/v1').replace(/\/$/, '');
             url ="https://8000-sapphire-jaguar-8okm2lnn.ws-eu25.gitpod.io"
             
             const app = Vue.createApp({
+
                 data() {
                     return {
                         items: null,
@@ -102,6 +101,8 @@ a {
                 mounted() {
                     this.load_items();
                 },
+                //This is the javascript that shows all the data that we have saved in our form
+                //is the get request for all the data for the server
                 methods:{
                     load_items(){
                         fetch(url + "/items")
@@ -115,7 +116,8 @@ a {
                             })
                             .catch(err => console.log(err.message))
                     },
-
+                    //we are now creating an item that will work with our servers post request
+                    //we are doing this by using the fetch command then the server routing for post
                     async create_item(){
                         var arr = this.keywords.split(',')
                         arr = arr.map(s => s.trim())
@@ -136,22 +138,6 @@ a {
                             },
                             body: JSON.stringify(data)
                         }).catch(err => console.log(err))
-
-                        //clear input fields
-                        this.userId = '';
-                        this.description = '';
-                        this.image= '';
-                        this.lat = '';
-                        this.lon = '';
-                        this.keywords_string = '';
-
-
-                      
-                        for(let item of this.items){
-                            this.hideMarker(item);
-                        }
-
-                        this.load_items()
                     },
 
                     async delete_item(item){

@@ -28,7 +28,7 @@ class getResource():
     def on_get(self,req,resp,itemId):#Request for a singular item
 
         #changes the itemId variable to setid 
-        setId = int(itemId) -1
+        setId = int(itemId)
         
         #creates an empty dictionary that we then put the data in from the datestore
         fetchedItem={{}}
@@ -41,12 +41,12 @@ class getResource():
         #responds to the get requests and shows the data for the specified id 
         else:
             resp.status= falcon.HTTP_200
-            resp.media ={"id" :fetchedItem.get('id') + 1}
+            resp.media ={"id" :fetchedItem.get('id')}
         resp.content_type = "application/json"
     
     def on_delete(self, req, resp, itemId):
         #similar to get request set a variable for the id
-        setId = int(itemId) - 1
+        setId = int(itemId)
 
         #put the items from the datastore into a variable that we can use
         item = datastore.get_item(setId)
@@ -116,7 +116,7 @@ api = falcon.App(middleware=[HandleCORS() ])
 #routes for the post, get, delete requests
 api.add_route('/', rootResource())
 api.add_route('/item', postResource())
-api.add_route('/item/{userId}/',getResource())
+api.add_route('/item/{itemId}/',getResource())
 api.add_route('/items', getmultiResource())
 
 #allows the server to be run locally
