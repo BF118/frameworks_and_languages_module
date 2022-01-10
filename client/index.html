@@ -82,7 +82,7 @@ a {
 
 
 <script>
-            url ="https://8000-sapphire-jaguar-8okm2lnn.ws-eu25.gitpod.io"
+            url ="https://8000-sapphire-jaguar-8okm2lnn.ws-eu25.gitpod.io"//url for the server
             
             const app = Vue.createApp({
 
@@ -139,7 +139,7 @@ a {
                             body: JSON.stringify(data)
                         }).catch(err => console.log(err))
                     },
-
+                    //Delete request for the server
                     async delete_item(item){
                         
                         await fetch(url + "/item/" + item.id, {
@@ -159,10 +159,6 @@ a {
                             this.create_item();
                         }
                     },
-
-                    toggleCollapsed(){
-                        this.collapsed_div = !this.collapsed_div;
-                    }
                 }
             });
 
